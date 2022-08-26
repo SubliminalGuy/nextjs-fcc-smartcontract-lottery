@@ -12,6 +12,7 @@ export default function LotteryEntrance() {
     const [entranceFee, setEntranceFee] = useState("0")
     const [numPlayers, setNumPlayers] = useState("0")
     const [recentWinner, setRecentWinner] = useState("0")
+    const [lotteryState, setLotteryState] = useState("Unknown")
 
     const dispatch = useNotification()
 
@@ -48,14 +49,23 @@ export default function LotteryEntrance() {
         params: {},
     })
 
+    const { runContractFunction: getLotteryState } = useWeb3Contract({
+        abi,
+        contractAddress: lotteryAddress,
+        functionName: "getLotteryState",
+        params: {},
+    })
+
     async function updateUI() {
         let entranceFeeFromCall = await getEntranceFee()
         let numberOfPlayersFromCall = (await getNumberOfPlayers()).toString()
         let recentWinnerFromCall = await getRecentWinner()
+        let lotteryStateFromCall = await getLotteryState().toString()
 
         setEntranceFee(entranceFeeFromCall)
         setNumPlayers(numberOfPlayersFromCall)
         setRecentWinner(recentWinnerFromCall)
+        setLotteryState(lotteryStateFromCall)
     }
 
     useEffect(() => {
@@ -107,6 +117,7 @@ export default function LotteryEntrance() {
                     </div>
                     <div>Number of Players: {numPlayers}</div>
                     <div>Recent Winner: {recentWinner}</div>
+                    <div>The Lottery is: {lotteryState}</div>
                 </div>
             ) : (
                 <div>No Lottery Address Detected!</div>

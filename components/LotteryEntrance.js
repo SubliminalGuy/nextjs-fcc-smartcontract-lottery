@@ -60,7 +60,7 @@ export default function LotteryEntrance() {
         let entranceFeeFromCall = await getEntranceFee()
         let numberOfPlayersFromCall = (await getNumberOfPlayers()).toString()
         let recentWinnerFromCall = await getRecentWinner()
-        let lotteryStateFromCall = await getLotteryState().toString()
+        let lotteryStateFromCall = (await getLotteryState()).toString()
 
         setEntranceFee(entranceFeeFromCall)
         setNumPlayers(numberOfPlayersFromCall)

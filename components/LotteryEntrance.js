@@ -79,7 +79,7 @@ export default function LotteryEntrance() {
         let lotteryStateFromCall =
             (await getLotteryState()).toString() == 0 ? "OPEN" : "CALCULATING"
         let intervalFromCall = (await getInterval()).toString()
-        let timestampFromCall = await getLatestTimeStamp()
+        let timestampFromCall = (await getLatestTimeStamp()).toString()
         setEntranceFee(entranceFeeFromCall)
         setNumPlayers(numberOfPlayersFromCall)
         setRecentWinner(recentWinnerFromCall)

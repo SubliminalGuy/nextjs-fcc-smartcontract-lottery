@@ -14,6 +14,7 @@ export default function LotteryEntrance() {
     const [recentWinner, setRecentWinner] = useState("0")
     const [lotteryState, setLotteryState] = useState("Unknown")
     const [timeInterval, setTimeInterval] = useState("Unknown")
+    const [latestTimeStamp, setLatestTimeStamp] = useState("0")
 
     const dispatch = useNotification()
 
@@ -64,6 +65,13 @@ export default function LotteryEntrance() {
         params: {},
     })
 
+    const { runContractFunction: getLatestTimeStamp } = useWeb3Contract({
+        abi,
+        contractAddress: lotteryAddress,
+        functionName: "getLatestTimeStamp",
+        params: {},
+    })
+
     async function updateUI() {
         let entranceFeeFromCall = await getEntranceFee()
         let numberOfPlayersFromCall = (await getNumberOfPlayers()).toString()
@@ -71,11 +79,13 @@ export default function LotteryEntrance() {
         let lotteryStateFromCall =
             (await getLotteryState()).toString() == 0 ? "OPEN" : "CALCULATING"
         let intervalFromCall = (await getInterval()).toString()
+        let timestampFromCall = await getLatestTimeStamp()
         setEntranceFee(entranceFeeFromCall)
         setNumPlayers(numberOfPlayersFromCall)
         setRecentWinner(recentWinnerFromCall)
         setLotteryState(lotteryStateFromCall)
         setTimeInterval(intervalFromCall)
+        setLatestTimeStamp(timestampFromCall)
     }
 
     useEffect(() => {
@@ -129,6 +139,7 @@ export default function LotteryEntrance() {
                     <div>Recent Winner: {recentWinner}</div>
                     <div>The Lottery is: {lotteryState}</div>
                     <div>Lottery Time Intervall: {timeInterval}</div>
+                    <div>Timestamp: {latestTimeStamp}</div>
                 </div>
             ) : (
                 <div>No Lottery Address Detected!</div>
